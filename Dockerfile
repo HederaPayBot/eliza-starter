@@ -14,6 +14,17 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 # Set the working directory
 WORKDIR /app
 
+# Clone the Hedera plugin (with --no-cache to ensure we get the latest version)
+RUN git clone https://github.com/HederaPayBot/eliza-plugin-hedera.git --depth 1
+
+# Build the Hedera plugin
+WORKDIR /app/eliza-plugin-hedera
+RUN pnpm install
+RUN pnpm build
+
+# Switch back to main working directory
+WORKDIR /app
+
 # Copy package.json and other configuration files
 COPY package.json ./
 COPY pnpm-lock.yaml ./
@@ -46,6 +57,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+
+# Copy the Hedera plugin from builder stage
+COPY --from=builder /app/eliza-plugin-hedera /app/eliza-plugin-hedera
 
 # Copy built artifacts and production dependencies from the builder stage
 COPY --from=builder /app/package.json /app/

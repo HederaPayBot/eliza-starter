@@ -26,6 +26,12 @@ services:
             - SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
             - HELIUS_API_KEY=
             - SERVER_PORT=3000
+            # Hedera-specific environment variables
+            - HEDERA_ACCOUNT_ID=
+            - HEDERA_PRIVATE_KEY=
+            - HEDERA_PUBLIC_KEY=
+            - HEDERA_NETWORK_TYPE=testnet
+            - HEDERA_KEY_TYPE=ED25519
         ports:
             - "3000:3000"
         restart: always
